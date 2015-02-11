@@ -1,0 +1,116 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SF Movie - Tong Zhang</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
+<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="dataquery.js"></script>
+</head>
+<body>
+<div class="jumbotron">
+    <div class="container-fluid">
+	<center>
+        <h2>San Francisco Movie Tracker</h2>    
+		<h3><a href="mailto:healthytony@gmail.com">Tong Zhang</a></h3>
+    </center>
+	</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs"></div>
+			<div class="col-xs">            
+				<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<center>
+		
+		<script>
+		var map;
+		function enterEvent(e)
+		{
+			if (e.keyCode == 13) 
+			{
+				var tb = document.getElementById("mname");		
+				if(tb.value == "" || tb.value == null) return false;
+				
+				clearRec();
+				loadData(tb.value, map);
+				return false;
+			}
+			return true;
+		};
+
+		</script>		
+		
+		<input type="text" class="form-control" id="mname" placeholder="Type movie names and Enter" style="width:20%" list="titles"
+				onkeypress="return enterEvent(event)" onkeyup="loadTitles();"/>
+		<datalist id="titles"></datalist>
+		<br>
+		<article>	
+		  <span id="status"></span>
+		</article>
+		</center>
+			<script>
+			function success(position) 
+			{
+			  var s = document.querySelector('#status');  
+			  if (s.className == 'success') {
+				// not sure why we're hitting this twice in FF, I think it's to do with a cached result coming back    
+				return;
+			  }
+			  
+			  s.className = 'success';
+			  
+			  var mapcanvas = document.createElement('div');
+			  mapcanvas.id = 'mapcanvas';
+			  mapcanvas.style.height = '400px';
+			  mapcanvas.style.width = '560px';
+				
+			  document.querySelector('article').appendChild(mapcanvas);
+			  
+			  // new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			  var latlng = {lat: 37.78, lng: -122.43}; // hardcoded as SF downtown
+			  var myOptions = {
+				zoom: 12,
+				center: latlng,
+				mapTypeControl: false,
+				navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			  };
+			  map = new google.maps.Map(document.getElementById("mapcanvas"), myOptions); 
+			  
+			  addMarker(map, latlng, "");
+			}
+
+			function error(msg) {
+			  var s = document.querySelector('#status');
+			  s.innerHTML = typeof msg == 'string' ? msg : "failed";
+			  s.className = 'fail';  
+			}
+
+			if (navigator.geolocation) {
+			  navigator.geolocation.getCurrentPosition(success, error);
+			} else {
+			  error('not supported');
+			}
+			//loadData("", map);
+			</script>
+        </div>
+        <div class="col-xs">		
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+			<center>
+            <footer>
+                <p>&copy; Copyright 2015 <a href="mailto:healthytony@gmail.com">Tong Zhang</a></p>
+            </footer>
+			</center>
+        </div>
+    </div>
+</div>
+</body>
+</html>                                		
